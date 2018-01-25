@@ -4,20 +4,28 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.example.lp.myapplication.R;
 import com.example.lp.myapplication.extensions.ApiRequest;
 import com.example.lp.myapplication.interfaces.ApiRequestComplete;
+import com.example.lp.myapplication.models.Matiere;
+import com.example.lp.myapplication.models.Note;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by lp on 24/01/2018.
@@ -28,9 +36,12 @@ public class AddFragment extends Fragment {
     private TextView mark;
     private TextView quotient;
     private TextView coeff;
-    private TextView matiere;
+    private Spinner matiere;
     private Button ButtonValidation;
     private TextView error;
+
+    private ArrayList<Matiere> items;
+    private SpinnerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +57,10 @@ public class AddFragment extends Fragment {
         ButtonValidation = rootView.findViewById(R.id.buttonValidation);
         error = rootView.findViewById(R.id.error);
 
+        items = new ArrayList<>();
+        adapter = new com.example.lp.myapplication.adapter.SpinnerAdapter(getActivity(), R.layout.spinner, items);
+
+        postMatiere();
         ButtonValidation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,9 +81,9 @@ public class AddFragment extends Fragment {
                     error.setText("Merci de saisir une note :)");
                     valid = false;
                 }
-                if(matiere.getText().toString().trim().length() == 0){
+                if(!matiere.isSelected()){
                     error.setVisibility(View.VISIBLE);
-                    error.setText("Merci de saisir une matière :)");
+                    error.setText("Merci de selectionner une matière :)");
                     valid = false;
                 }
 
@@ -77,7 +92,7 @@ public class AddFragment extends Fragment {
                     try {
                         note.put("note", mark.getText().toString());
                         note.put("coeff", coeff.getText().toString());
-                        note.put("matiere", matiere.getText().toString());
+                        note.put("matiere", matiere.getSelectedItem());
                         note.put("quotient", quotient.getText().toString());
 
                     } catch (JSONException e) {
@@ -95,13 +110,37 @@ public class AddFragment extends Fragment {
         ApiRequest.getInstance().requestPost(Request.Method.POST,  "add/1", note, new ApiRequestComplete<JSONObject>() {
             @Override
             public void onResponse(JSONObject result) throws JSONException {
-                if(result.getBoolean("succeed") == true){
+                if(result.getBoolean("succeed")){
                     ShowFragment newFragment = new ShowFragment();
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.containerLi, newFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
+    private void postMatiere() {
+        ApiRequest.getInstance().request(Request.Method.GET,  "matieres", new ApiRequestComplete<String>() {
+            @Override
+            public void onResponse(String result) throws JSONException {
+                JSONArray matieres = new JSONArray(result);
+
+                for(int numberMatieres = 0 ; numberMatieres < matieres.length() ; numberMatieres ++){
+                    JSONObject matiere = matieres.getJSONObject(numberMatieres);
+                    Matiere m = new Matiere(matiere.getInt("id"), matiere.getString("nom_matiere"));
+                    items.add(m);
+                }
+
+                matiere.setAdapter(adapter);
+
+
             }
 
             @Override

@@ -4,14 +4,14 @@ package com.example.lp.myapplication.models;
  * Created by lp on 25/01/2018.
  */
 
-public class Notes {
+public class Note {
 
     private Integer notes;
     private Integer coeff;
     private Integer quotient;
     private String matiere;
 
-    public Notes(Integer notes, Integer coeff, Integer quotient, String matiere) {
+    public Note(Integer notes, Integer coeff, Integer quotient, String matiere) {
         this.notes = notes;
         this.coeff = coeff;
         this.quotient = quotient;

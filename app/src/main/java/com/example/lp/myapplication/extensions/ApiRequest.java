@@ -81,16 +81,14 @@ public class ApiRequest {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if(null != error){
-                            listener.onError(error.getMessage().toString());
+                            listener.onError(error.toString());
                         }
                     }
                 }) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                if (method == Request.Method.POST) {
-                    params.put("Content-Type", "application/json");
-                }
+                params.put("Content-Type", "application/json");
                 params.put("Accept", "application/json");
                 return params;
             }
@@ -135,9 +133,7 @@ public class ApiRequest {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                if (method == Request.Method.POST) {
-                    params.put("Content-Type", "application/json");
-                }
+                params.put("Content-Type", "application/json");
                 params.put("Accept", "application/json");
                 return params;
             }

@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.lp.myapplication.R;
+import com.example.lp.myapplication.models.Matiere;
 import com.example.lp.myapplication.models.Note;
 
 import java.util.List;
@@ -18,11 +19,11 @@ import java.util.List;
  * Created by lp on 25/01/2018.
  */
 
-public class NotesAdapter extends ArrayAdapter<Note> {
+public class SpinnerAdapter  extends ArrayAdapter<Matiere> {
 
     private int resource;
 
-    public NotesAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Note> objects) {
+    public SpinnerAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Matiere> objects) {
         super(context, resource, objects);
         this.resource = resource;
     }
@@ -30,23 +31,15 @@ public class NotesAdapter extends ArrayAdapter<Note> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Note item = getItem(position);
+        Matiere item = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
 
-        TextView note = convertView.findViewById(R.id.notetx);
-        TextView matiere = convertView.findViewById(R.id.matieretx);
-        TextView quotient = convertView.findViewById(R.id.quotienttx);
-        TextView coeff = convertView.findViewById(R.id.coefftx);
-
-        note.setText(String.valueOf(item.getNotes()));
-        matiere.setText(item.getMatiere());
-        quotient.setText(String.valueOf(item.getQuotient()));
-        coeff.setText("Coeff :" + String.valueOf(item.getCoeff()));
+        TextView name = convertView.findViewById(R.id.name_matiere);
+        name.setText(String.valueOf(item.getName()));
 
         return convertView;
     }
-
 }

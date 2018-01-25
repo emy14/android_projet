@@ -1,12 +1,12 @@
 package com.example.lp.myapplication.activities;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -14,14 +14,13 @@ import com.example.lp.myapplication.R;
 import com.example.lp.myapplication.adapter.NotesAdapter;
 import com.example.lp.myapplication.extensions.ApiRequest;
 import com.example.lp.myapplication.interfaces.ApiRequestComplete;
-import com.example.lp.myapplication.models.Notes;
+import com.example.lp.myapplication.models.Note;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by lp on 24/01/2018.
@@ -29,7 +28,7 @@ import java.util.List;
 
 public class ShowFragment extends Fragment {
 
-    private ArrayList<Notes> items;
+    private ArrayList<Note> items;
     private ListView listView;
     private NotesAdapter itemsAdapter;
 
@@ -40,10 +39,9 @@ public class ShowFragment extends Fragment {
                 container, false);
 
         listView = (ListView) rootView.findViewById(R.id.list);
-
+        listView.setOnItemClickListener(mUpdateListener);
         items = new ArrayList<>();
         itemsAdapter = new NotesAdapter(getActivity(), R.layout.adapter_notes, items);
-//        itemsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, items);
 
         getNotes();
 
@@ -65,9 +63,8 @@ public class ShowFragment extends Fragment {
 
                 for(int numberNotes = 0 ; numberNotes < notes.length() ; numberNotes ++){
                    JSONObject note = notes.getJSONObject(numberNotes);
-                   Notes n = new Notes( note.getInt("note") ,  note.getInt("coeff"),  note.getInt("quotient"),  note.getString("nom_matiere")  );
-//                    items.add(note.getString("nom_matiere") + " : " + note.getString("note") + "/" + note.getString("quotient") + " - Coeff : " + note.getString("coeff"));
-                      items.add(n);
+                   Note n = new Note( note.getInt("note") ,  note.getInt("coeff"),  note.getInt("quotient"),  note.getString("nom_matiere")  );
+                   items.add(n);
                 }
 
                 listView.setAdapter(itemsAdapter);
@@ -80,4 +77,20 @@ public class ShowFragment extends Fragment {
             }
         });
     }
+    private AdapterView.OnItemClickListener mUpdateListener = new AdapterView.OnItemClickListener(){
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            Note item = (Note) parent.getItemAtPosition(position);
+
+            Intent intent = new Intent(getActivity(), UpdateActivity.class);
+            intent.putExtra("note", item.getNotes().toString());
+            intent.putExtra("quotient", item.getQuotient().toString());
+            intent.putExtra("coeff", item.getCoeff().toString());
+            intent.putExtra("matiere", item.getMatiere().toString());
+
+            startActivity(intent);
+
+        }
+    };
 }
