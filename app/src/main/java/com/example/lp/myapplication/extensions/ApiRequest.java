@@ -80,10 +80,9 @@ public class ApiRequest {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Api request", error.getMessage());
-                        listener.onError(error.getMessage().toString());
-
-
+                        if(null != error){
+                            listener.onError(error.getMessage().toString());
+                        }
                     }
                 }) {
             @Override
@@ -104,7 +103,7 @@ public class ApiRequest {
 
 
 
-    public void requestPost(final int method, String link, JSONObject json, final ApiRequestComplete<String> listener)
+    public void requestPost(final int method, String link, JSONObject json, final ApiRequestComplete<JSONObject> listener)
     {
 
         String url = urlApi + link;
@@ -118,7 +117,7 @@ public class ApiRequest {
                         Log.d("Api request", "somePostRequest Response : " + response.toString());
                         if(null != response.toString())
                             try {
-                                listener.onResponse(response.toString());
+                                listener.onResponse(response);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

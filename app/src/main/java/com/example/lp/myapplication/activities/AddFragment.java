@@ -1,6 +1,7 @@
 package com.example.lp.myapplication.activities;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -75,9 +76,9 @@ public class AddFragment extends Fragment {
                     JSONObject note = new JSONObject();
                     try {
                         note.put("note", mark.getText().toString());
-                        note.put("note", mark.getText().toString());
-                        note.put("note", mark.getText().toString());
-                        note.put("note", mark.getText().toString());
+                        note.put("coeff", coeff.getText().toString());
+                        note.put("matiere", matiere.getText().toString());
+                        note.put("quotient", quotient.getText().toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -91,10 +92,16 @@ public class AddFragment extends Fragment {
     }
 
     private void postNote(JSONObject note) {
-        ApiRequest.getInstance().requestPost(Request.Method.POST,  "ajout/1", note, new ApiRequestComplete<String>() {
+        ApiRequest.getInstance().requestPost(Request.Method.POST,  "add/1", note, new ApiRequestComplete<JSONObject>() {
             @Override
-            public void onResponse(String result) throws JSONException {
-
+            public void onResponse(JSONObject result) throws JSONException {
+                if(result.getBoolean("succeed") == true){
+                    ShowFragment newFragment = new ShowFragment();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.containerLi, newFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
             }
 
             @Override

@@ -8,7 +8,7 @@ import org.json.JSONException;
 
 public interface ApiRequestComplete<T>
 {
-    void onResponse(String result) throws JSONException;
+    void onResponse(T result) throws JSONException;
     void onError(String error);
 
 }

@@ -100,14 +100,6 @@ public class BaseActivity extends AppCompatActivity
             transaction.addToBackStack(null);
             transaction.commit();
 
-        } else if (id == R.id.nav_update) {
-            Fragment newFragment = new UpdateFragment();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.containerLi, newFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-
-
         } else if (id == R.id.nav_connexion) {
             Fragment newFragment = new ConnexionFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();

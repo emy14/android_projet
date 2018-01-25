@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Nom de la matière"
-            android:inputType="text|textPersonName" />
+            android:inputType="text|number" />
 
         <EditText
             android:id="@+id/note"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Note"
-            android:inputType="textPersonName" />
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/quotient"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Quotient"
-            android:inputType="textPersonName" />
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/coeff"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Coeff"
-            android:inputType="textPersonName" />
+            android:inputType="number" />
 
         <Button
             android:id="@+id/buttonValidation"
