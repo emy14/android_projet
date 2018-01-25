@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.android.volley.Request;
 import com.example.lp.myapplication.R;
 import com.example.lp.myapplication.extensions.ApiRequest;
 import com.example.lp.myapplication.interfaces.ApiRequestComplete;
@@ -54,7 +55,7 @@ public class ShowFragment extends Fragment {
 
     public void getNotes() {
 
-        ApiRequest.getInstance().request("consultation/1", new ApiRequestComplete<String>() {
+        ApiRequest.getInstance().request(Request.Method.GET, "consultation/1", new ApiRequestComplete<String>() {
             @Override
             public void onResponse(String result) throws JSONException {
                 JSONArray notes = new JSONArray(result);
