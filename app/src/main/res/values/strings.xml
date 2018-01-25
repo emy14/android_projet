@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Mes Notes</string>
+
+    <string name="navigation_drawer_open">Ouvrir</string>
+    <string name="navigation_drawer_close">Fermer</string>
+
+    <string name="action_settings">Paramètres</string>
+</resources>
