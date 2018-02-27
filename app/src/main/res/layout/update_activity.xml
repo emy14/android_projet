@@ -16,10 +16,19 @@
             android:text="TextView"
             android:visibility="gone" />
 
+
+        <TextView
+            android:id="@+id/mat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:visibility="visible" />
+
         <Spinner
             android:id="@+id/matiere"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/note"

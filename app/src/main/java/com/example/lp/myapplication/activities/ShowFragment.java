@@ -3,6 +3,7 @@ package com.example.lp.myapplication.activities;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class ShowFragment extends Fragment {
 
                 for(int numberNotes = 0 ; numberNotes < notes.length() ; numberNotes ++){
                    JSONObject note = notes.getJSONObject(numberNotes);
-                   Note n = new Note( note.getInt("note") ,  note.getInt("coeff"),  note.getInt("quotient"),  note.getString("nom_matiere")  );
+                   Note n = new Note(note.getInt("id_note"), note.getInt("note") ,  note.getInt("coeff"),  note.getInt("quotient"),  note.getString("nom_matiere"), note.getInt("id_matiere")  );
                    items.add(n);
                 }
 
@@ -84,10 +85,13 @@ public class ShowFragment extends Fragment {
             Note item = (Note) parent.getItemAtPosition(position);
 
             Intent intent = new Intent(getActivity(), UpdateActivity.class);
+            Log.d("note", item.getId().toString());
+            intent.putExtra("id", item.getId().toString());
             intent.putExtra("note", item.getNotes().toString());
             intent.putExtra("quotient", item.getQuotient().toString());
             intent.putExtra("coeff", item.getCoeff().toString());
             intent.putExtra("matiere", item.getMatiere().toString());
+            intent.putExtra("id_matiere", item.getId_matiere());
 
             startActivity(intent);
 

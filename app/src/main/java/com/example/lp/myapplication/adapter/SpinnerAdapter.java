@@ -42,4 +42,20 @@ public class SpinnerAdapter  extends ArrayAdapter<Matiere> {
 
         return convertView;
     }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+
+        Matiere item = getItem(position);
+
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
+        }
+
+        TextView name = convertView.findViewById(R.id.name_matiere);
+        name.setText(String.valueOf(item.getName()));
+
+        return convertView;
+    }
+
 }

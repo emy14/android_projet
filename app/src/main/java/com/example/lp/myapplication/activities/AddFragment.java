@@ -81,23 +81,25 @@ public class AddFragment extends Fragment {
                     error.setText("Merci de saisir une note :)");
                     valid = false;
                 }
-                if(!matiere.isSelected()){
+                if(matiere.getSelectedItem().toString().trim().length() == 0){
                     error.setVisibility(View.VISIBLE);
                     error.setText("Merci de selectionner une matière :)");
                     valid = false;
                 }
+
 
                 if(valid){
                     JSONObject note = new JSONObject();
                     try {
                         note.put("note", mark.getText().toString());
                         note.put("coeff", coeff.getText().toString());
-                        note.put("matiere", matiere.getSelectedItem());
+                        note.put("matiere", matiere.getSelectedItemPosition() + 1);
                         note.put("quotient", quotient.getText().toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                     postNote(note);
                 }
             }
