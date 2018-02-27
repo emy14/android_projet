@@ -5,4 +5,8 @@
     <string name="navigation_drawer_close">Fermer</string>
 
     <string name="action_settings">Paramètres</string>
+
+    <string name="facebook_app_id">639259626419929</string>
+    <string name="fb_login_protocol_scheme">fb639259626419929</string>
+
 </resources>
