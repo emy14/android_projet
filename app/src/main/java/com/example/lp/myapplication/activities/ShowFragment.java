@@ -98,7 +98,6 @@ public class ShowFragment extends Fragment {
             Note item = (Note) parent.getItemAtPosition(position);
 
             Intent intent = new Intent(getActivity(), UpdateActivity.class);
-            Log.d("note", item.getId().toString());
             intent.putExtra("id", item.getId().toString());
             intent.putExtra("note", item.getNotes().toString());
             intent.putExtra("quotient", item.getQuotient().toString());

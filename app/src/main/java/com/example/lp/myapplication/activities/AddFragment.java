@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,12 +130,18 @@ public class AddFragment extends Fragment {
         ApiRequest.getInstance().requestPost(Request.Method.POST,  "add/1", note, new ApiRequestComplete<JSONObject>() {
             @Override
             public void onResponse(JSONObject result) throws JSONException {
+                error.setVisibility(View.GONE);
                 if(result.getBoolean("succeed")){
                     ShowFragment newFragment = new ShowFragment();
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.containerLi, newFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
+                }
+                else {
+                    error.setVisibility(View.VISIBLE);
+                    error.setText(result.getString("message"));
+
                 }
             }
 

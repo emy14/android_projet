@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -175,9 +176,16 @@ public class UpdateActivity extends AppCompatActivity {
         ApiRequest.getInstance().requestPost(Request.Method.POST,  "update/"  + id, note, new ApiRequestComplete<JSONObject>() {
             @Override
             public void onResponse(JSONObject result) throws JSONException {
+
                 if(result.getBoolean("succeed")){
+                    error.setVisibility(View.GONE);
                     Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
                     startActivity(intent);
+                }
+                else {
+                    error.setVisibility(View.VISIBLE);
+                    error.setText(result.getString("message"));
+
                 }
             }
 
