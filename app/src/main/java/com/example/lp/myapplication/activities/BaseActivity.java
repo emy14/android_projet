@@ -2,7 +2,6 @@ package com.example.lp.myapplication.activities;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,15 +9,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.android.volley.Request;
 import com.example.lp.myapplication.R;
 import com.example.lp.myapplication.extensions.ApiRequest;
-
-import org.json.JSONObject;
 
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,11 +37,14 @@ public class BaseActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ShowFragment newFragment = new ShowFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.containerLi, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+
+
+            ShowFragment newFragment = new ShowFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.containerLi, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
     }
 
     @Override
@@ -101,6 +99,8 @@ public class BaseActivity extends AppCompatActivity
             transaction.commit();
 
         } else if (id == R.id.nav_connexion) {
+
+
             Fragment newFragment = new ConnexionFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.containerLi, newFragment);
@@ -112,5 +112,8 @@ public class BaseActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
 
 }

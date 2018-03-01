@@ -1,17 +1,15 @@
 package com.example.lp.myapplication.activities;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -39,6 +37,7 @@ public class UpdateActivity extends AppCompatActivity {
     private TextView coeff;
     private TextView matiere;
     private Button ButtonValidation;
+    private Button ButtonUpdate;
     private Button ButtonDelete;
     private TextView error;
     private SpinnerAdapter adapter;
@@ -46,95 +45,106 @@ public class UpdateActivity extends AppCompatActivity {
     private Spinner matiereSpinner;
     private String id;
     private Integer position;
+    private LinearLayout updateLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.update_activity);
+        setContentView(R.layout.add_activity);
 
-        mark =  (TextView) findViewById(R.id.note);
-        quotient = (TextView) findViewById(R.id.quotient);
-        coeff = (TextView) findViewById(R.id.coeff);
-        matiere = (TextView) findViewById(R.id.mat);
-        matiereSpinner = (Spinner) findViewById(R.id.matiere);
+            mark = (TextView) findViewById(R.id.note);
+            quotient = (TextView) findViewById(R.id.quotient);
+            coeff = (TextView) findViewById(R.id.coeff);
+            matiereSpinner = (Spinner) findViewById(R.id.matiere);
+            updateLayout = (LinearLayout) findViewById(R.id.update);
+            ButtonValidation = (Button) findViewById(R.id.buttonValidation);
+            ButtonUpdate = (Button) findViewById(R.id.buttonVal);
+            ButtonDelete = (Button) findViewById(R.id.buttonDelete);
+            error = (TextView) findViewById(R.id.error);
 
-        ButtonValidation = (Button) findViewById(R.id.buttonValidation);
-        ButtonDelete= (Button) findViewById(R.id.buttonDelete);
-        error = (TextView) findViewById(R.id.error);
-        
-
-
-        Bundle bundle = this.getIntent().getExtras();
-
-        id = bundle.getString("id");
-
-        Log.d("helo", id);
-        
-        mark.setText(bundle.getString("note"));
-        quotient.setText(bundle.getString("quotient"));
-
-        matiere.setText(bundle.getString("matiere"));
-        coeff.setText(bundle.getString("coeff"));
-        matiere.setVisibility(View.GONE);
-        matiereSpinner.setVisibility(View.VISIBLE);
-
-        items = new ArrayList<>();
-        adapter = new com.example.lp.myapplication.adapter.SpinnerAdapter(getApplicationContext(), R.layout.spinner, items);
-        position = bundle.getInt("id_matiere");
-
-        postMatiere();
-
-        ButtonValidation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean valid = true;
-
-                if(coeff.getText().toString().trim().length() == 0){
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("Merci de saisir un coefficient :)");
-                    valid = false;
-                }
-                if(quotient.getText().toString().trim().length() == 0){
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("Merci de saisir un quotient :)");
-                    valid = false;
-                }
-                if(mark.getText().toString().trim().length() == 0){
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("Merci de saisir une note :)");
-                    valid = false;
-                }
+            ButtonValidation.setVisibility(View.GONE);
+            updateLayout.setVisibility(View.VISIBLE);
 
 
+            Bundle bundle = this.getIntent().getExtras();
 
-                if(valid){
-                    JSONObject note = new JSONObject();
-                    try {
-                        note.put("note", mark.getText().toString());
-                        note.put("coeff", coeff.getText().toString());
-                        note.put("matiere", matiereSpinner.getSelectedItemPosition() + 1);
-                        note.put("quotient", quotient.getText().toString());
+            id = bundle.getString("id");
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
+            mark.setText(bundle.getString("note"));
+            quotient.setText(bundle.getString("quotient"));
+
+            coeff.setText(bundle.getString("coeff"));
+
+            items = new ArrayList<>();
+            adapter = new com.example.lp.myapplication.adapter.SpinnerAdapter(getApplicationContext(), R.layout.spinner, items);
+            position = bundle.getInt("id_matiere");
+
+            postMatiere();
+
+            ButtonUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boolean valid = true;
+
+                    if (coeff.getText().toString().trim().length() == 0) {
+                        error.setVisibility(View.VISIBLE);
+                        error.setText("Merci de saisir un coefficient :)");
+                        valid = false;
+                    }
+                    if (quotient.getText().toString().trim().length() == 0) {
+                        error.setVisibility(View.VISIBLE);
+                        error.setText("Merci de saisir un quotient :)");
+                        valid = false;
+                    }
+                    if (mark.getText().toString().trim().length() == 0) {
+                        error.setVisibility(View.VISIBLE);
+                        error.setText("Merci de saisir une note :)");
+                        valid = false;
                     }
 
-                    postNote(note);
+
+                    if (valid) {
+                        JSONObject note = new JSONObject();
+                        try {
+                            note.put("note", mark.getText().toString());
+                            note.put("coeff", coeff.getText().toString());
+                            note.put("matiere", matiereSpinner.getSelectedItemPosition() + 1);
+                            note.put("quotient", quotient.getText().toString());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        postNote(note);
+                    }
                 }
-            }
-        });
+            });
 
 
-        ButtonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                delete();
-            }
-        });
+            ButtonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    delete();
+                }
+            });
 
 
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        SharedPreferences sharedPreferences =  getSharedPreferences("USER", Context.MODE_PRIVATE);
+        if(!sharedPreferences.contains("email")){
+            Fragment newFragment = new ConnexionFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.containerLi, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
 
 
     private void postMatiere() {

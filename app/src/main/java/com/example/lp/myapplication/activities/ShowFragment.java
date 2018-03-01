@@ -1,7 +1,10 @@
 package com.example.lp.myapplication.activities;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,9 +54,19 @@ public class ShowFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
+    public void onResume(){
         super.onResume();
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("USER", Context.MODE_PRIVATE);
+        if(!sharedPreferences.contains("email")){
+            Fragment newFragment = new ConnexionFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.containerLi, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
+
 
     public void getNotes() {
 
