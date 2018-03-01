@@ -12,7 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.example.lp.myapplication.extensions.ApiRequest;
+import com.example.lp.myapplication.interfaces.ApiRequestComplete;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -40,6 +44,8 @@ import java.util.Arrays;
 public class ConnexionFragment extends Fragment {
     private LoginButton loginButton;
     private Button logoutButton;
+
+    private int OPTIONS_INSCRIPTION = 1;
 
     private CallbackManager callbackManager;
     private String email;
@@ -77,13 +83,18 @@ public class ConnexionFragment extends Fragment {
                                 Log.v("LoginActivity", response.toString());
                                 try {
                                     email = object.getString("email");
-                            /*        String first_name = object.getString("first_name");
-                                    String last_name = object.getString("last_name");*/
                                     String id = object.getString("id");
 
-                                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("USER", Context.MODE_PRIVATE);
-                                    sharedPreferences.edit().putString("email", email)
-                                                            .putString("id", id).commit();
+                                    if(OPTIONS_INSCRIPTION==0){
+                                        JSONObject connexion = new JSONObject();
+                                        connexion.put("email", email);
+                                        inscription(connexion);
+                                    }
+                                    else {
+                                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("USER", Context.MODE_PRIVATE);
+                                        sharedPreferences.edit().putString("email", email)
+                                                .putString("id", id).commit();
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -94,8 +105,12 @@ public class ConnexionFragment extends Fragment {
                 request.setParameters(parameters);
                 request.executeAsync();
 
-                loginButton.setVisibility(View.GONE);
-                connexionMessage.setVisibility(View.VISIBLE);
+                if(OPTIONS_INSCRIPTION!=0) {
+                    loginButton.setVisibility(View.GONE);
+                    connexionMessage.setVisibility(View.VISIBLE);
+
+                    Toast.makeText(getActivity(), "Félicitation, vous êtes bien connecté", Toast.LENGTH_SHORT).show();
+                }
 
 
             }
@@ -115,6 +130,30 @@ public class ConnexionFragment extends Fragment {
 
         return rootView;
 
+    }
+
+    private void inscription(JSONObject connexion) {
+        ApiRequest.getInstance().requestPost(Request.Method.POST,  "inscription", connexion, new ApiRequestComplete<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject result) throws JSONException {
+                if(result.getBoolean("succeed")){
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("USER", Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString("email", email)
+                            .commit();
+
+                    loginButton.setVisibility(View.GONE);
+                    connexionMessage.setVisibility(View.VISIBLE);
+
+                    Toast.makeText(getActivity(), "Félicitation, vous êtes bien connecté", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
     @Override
