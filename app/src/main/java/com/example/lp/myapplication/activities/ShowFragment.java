@@ -35,6 +35,7 @@ public class ShowFragment extends Fragment {
     private ArrayList<Note> items;
     private ListView listView;
     private NotesAdapter itemsAdapter;
+    private String id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,7 +48,12 @@ public class ShowFragment extends Fragment {
         items = new ArrayList<>();
         itemsAdapter = new NotesAdapter(getActivity(), R.layout.adapter_notes, items);
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("USER", Context.MODE_PRIVATE);
+        id = sharedPreferences.getString("id", null);
+
         getNotes();
+
+
 
         return rootView;
 
@@ -58,6 +64,9 @@ public class ShowFragment extends Fragment {
         super.onResume();
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("USER", Context.MODE_PRIVATE);
+        id = sharedPreferences.getString("id", null);
+
+        Log.d("coucou", id);
         if(!sharedPreferences.contains("email")){
             Fragment newFragment = new ConnexionFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -70,7 +79,7 @@ public class ShowFragment extends Fragment {
 
     public void getNotes() {
 
-        ApiRequest.getInstance().request(Request.Method.GET, "show/1", new ApiRequestComplete<String>() {
+        ApiRequest.getInstance().request(Request.Method.GET, "show/" + id, new ApiRequestComplete<String>() {
             @Override
             public void onResponse(String result) throws JSONException {
                 JSONArray notes = new JSONArray(result);

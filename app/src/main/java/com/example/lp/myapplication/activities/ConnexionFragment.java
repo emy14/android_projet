@@ -45,7 +45,7 @@ public class ConnexionFragment extends Fragment {
     private LoginButton loginButton;
     private Button logoutButton;
 
-    private int OPTIONS_INSCRIPTION = 1;
+    private int OPTIONS_INSCRIPTION = 0;
 
     private CallbackManager callbackManager;
     private String email;
@@ -136,10 +136,12 @@ public class ConnexionFragment extends Fragment {
         ApiRequest.getInstance().requestPost(Request.Method.POST,  "inscription", connexion, new ApiRequestComplete<JSONObject>() {
             @Override
             public void onResponse(JSONObject result) throws JSONException {
+                Log.d("ok", String.valueOf(result.getString("id_user")));
                 if(result.getBoolean("succeed")){
                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("USER", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString("email", email)
-                            .commit();
+                                            .putString("id", result.getString("id_user"))
+                                            .apply();
 
                     loginButton.setVisibility(View.GONE);
                     connexionMessage.setVisibility(View.VISIBLE);

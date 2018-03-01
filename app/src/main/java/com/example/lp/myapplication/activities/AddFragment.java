@@ -43,6 +43,7 @@ public class AddFragment extends Fragment {
 
     private ArrayList<Matiere> items;
     private SpinnerAdapter adapter;
+    private String id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +51,9 @@ public class AddFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.add_activity,
                 container, false);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("USER", Context.MODE_PRIVATE);
+        id = sharedPreferences.getString("id", null);
 
             mark = rootView.findViewById(R.id.note);
             quotient = rootView.findViewById(R.id.quotient);
@@ -116,7 +120,7 @@ public class AddFragment extends Fragment {
         super.onResume();
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("USER", Context.MODE_PRIVATE);
-
+        id = sharedPreferences.getString("id", null);
         if(!sharedPreferences.contains("email")){
             Fragment newFragment = new ConnexionFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -127,7 +131,7 @@ public class AddFragment extends Fragment {
     }
 
     private void postNote(JSONObject note) {
-        ApiRequest.getInstance().requestPost(Request.Method.POST,  "add/1", note, new ApiRequestComplete<JSONObject>() {
+        ApiRequest.getInstance().requestPost(Request.Method.POST,  "add/" + id, note, new ApiRequestComplete<JSONObject>() {
             @Override
             public void onResponse(JSONObject result) throws JSONException {
                 error.setVisibility(View.GONE);
